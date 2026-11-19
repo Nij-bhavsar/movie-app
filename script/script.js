@@ -17,6 +17,7 @@ if (btn && inp) {
         let movieName = inp.value.trim();
         if (movieName === "") {
             status.textContent = "Please enter a movie name!!";
+            status.style.color = "red"
             return;
         }
         getMovies(movieName);
@@ -70,7 +71,7 @@ function displayMovies(movies) {
 
         poster.style.cursor = "pointer";
         poster.addEventListener("click", () => {
-            window.location.href = `details.html?id=${movie.imdbID}`;
+            window.location.href = `./pages/details.html?id=${movie.imdbID}`;
         });
 
         // Movie title
@@ -126,7 +127,7 @@ function addFavorite(movie) {
 
 // DISPLAY FAVORITES PAGE
 function displayFavorites() {
-
+    
     if (!favoriteContainer) {
         return;
     }
@@ -136,7 +137,6 @@ function displayFavorites() {
         status.textContent = "No favorite movies added yet!!";
         return;
     }
-
     status.textContent = "";
 
     favorites.forEach((movie) => {
@@ -174,7 +174,6 @@ function displayFavorites() {
         card.append(poster, title, year, removeBtn);
         favoriteContainer.appendChild(card);
     });
-
 }
 
 // REMOVE MOVIE FROM FAVORITES
@@ -187,7 +186,6 @@ function removeFavorite(id) {
         JSON.stringify(favorites)
     );
     displayFavorites();
-
 }
 
 // detail movie page
@@ -218,10 +216,12 @@ async function getMovieDetails() {
 
         if (movie.Response === "True") {
             detailsStatus.textContent = ""
+            // details page data
+
             detailsContainer.innerHTML = `
                 <div class="details-card">
                     <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/300x450"}" alt="${movie.Title}">
-
+                    
                     <div>
                         <h1>${movie.Title}</h1>
                         <p><strong>Year:</strong> ${movie.Year}</p>
