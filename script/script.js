@@ -64,10 +64,18 @@ function displayMovies(movies) {
 
         // Movie poster
         const poster = document.createElement("img");
-        poster.src = movie.Poster !== "N/A"
-            ? movie.Poster
-            : "https://placehold.co/300x450?text=No+Poster";
-        poster.alt = "image is not availaible!!";
+        if (movie.Poster !== "N/A") {
+            poster.src = movie.Poster;
+        } 
+        else {
+                poster.src = "../assets/defaultposter.webp";
+            }
+        poster.onerror = function () {
+        poster.onerror = null;
+        poster.src = "./assets/defaultposter.webp";
+            };
+
+poster.alt = movie.Title;
 
         poster.style.cursor = "pointer";
         poster.addEventListener("click", () => {
@@ -146,10 +154,17 @@ function displayFavorites() {
         // Movie poster
         const poster = document.createElement("img");
 
-        poster.src = movie.Poster !== "N/A"
-            ? movie.Poster
-            : "https://placehold.co/300x450?text=No+Poster";
-        poster.alt = movie.Title;
+        if (movie.Poster !== "N/A") {
+            poster.src = movie.Poster;
+        } 
+        else {
+                poster.src = "../assets/defaultposter.webp";
+            }
+        // for showing default photo for no image.
+        poster.onerror = function () {
+        poster.onerror = null;
+        poster.src = "../assets/defaultposter.webp";
+            };
 
         poster.style.cursor = "pointer";
         poster.addEventListener("click", () => {
@@ -220,8 +235,8 @@ async function getMovieDetails() {
 
             detailsContainer.innerHTML = `
                 <div class="details-card">
-                    <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/300x450"}" alt="${movie.Title}">
-                    
+                <img src="${movie.Poster !== "N/A" && movie.Poster ? movie.Poster : "../assets/defaultposter.webp"}" 
+                    onerror="this.onerror=null; this.src='../assets/defaultposter.webp';">                    
                     <div>
                         <h1>${movie.Title}</h1>
                         <p><strong>Year:</strong> ${movie.Year}</p>
