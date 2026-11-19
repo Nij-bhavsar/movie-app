@@ -2,7 +2,7 @@
 
 NijVerse is a simple movie search application that allows users to search for movies, explore movie details, and save their favorite movies.
 
-## ✨ Features
+## Features
 
 - Search movies by title.
 - Display movie posters and basic information.
@@ -13,7 +13,7 @@ NijVerse is a simple movie search application that allows users to search for mo
 - Responsive design for different screen sizes.
 - Display a default poster when a movie poster is unavailable.
 
-## 🛠️ Technologies Used
+## Technologies Used
 
 - HTML
 - CSS
@@ -21,7 +21,7 @@ NijVerse is a simple movie search application that allows users to search for mo
 - OMDb API
 - Local Storage
 
-## 📚 What I Learned
+## What I Learned
 
 - Working with APIs using the Fetch API.
 - Using Async/Await and Promises.
@@ -32,8 +32,9 @@ NijVerse is a simple movie search application that allows users to search for mo
 - Working with JSON data.
 - Managing multiple pages and navigation.
 
-## 🚀 How to Run
- click on this this link..>>  https://nij-bhavsar.github.io/movie-app/index.html
+## How to run
+ I have deployed this movie-app using github pages, so click on this this below link..  
+ <h2> https://nij-bhavsar.github.io/movie-app/index.html </h2>
 ---
 
 © 2026 NijVerse. All Rights Reserved.
