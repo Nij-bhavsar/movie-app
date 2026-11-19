@@ -5,8 +5,11 @@ const API_URL = "https://www.omdbapi.com/";
 let inp = document.querySelector("#inp");
 let btn = document.querySelector("#subbtn");
 let movieContainer = document.querySelector("#movieContainer");
+let heading2 = document.querySelector("#heading2")
+let heading3 = document.querySelector("#heading3")
 let favoriteContainer = document.querySelector("#favoriteContainer");
 let status = document.querySelector("#status");
+let backbtn = document.querySelector("#backbtn")
 
 // GET FAVORITES FROM LOCAL STORAGE
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -20,6 +23,9 @@ if (btn && inp) {
             status.style.color = "red"
             return;
         }
+        heading2.textContent = "Search result..."
+        document.querySelector("#home").scrollIntoView({ 
+            behavior: "smooth"});
         getMovies(movieName);
     });
 
@@ -27,6 +33,8 @@ if (btn && inp) {
     inp.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             btn.click();
+            document.querySelector("#home").scrollIntoView({ 
+            behavior: "smooth"});
         }
     });
 }
@@ -35,6 +43,7 @@ if (btn && inp) {
 async function getMovies(movieName) {
     try {
         status.textContent = "Loading movies...";
+        // heading3.textContent = "Search results..."
         movieContainer.innerHTML = "";
         const url = `${API_URL}?s=${encodeURIComponent(movieName)}&apikey=${API_KEY}`
         console.log("Fetching URL:", url);
@@ -57,6 +66,7 @@ async function getMovies(movieName) {
 
 // DISPLAY MOVIE CARDS
 function displayMovies(movies) {
+
     movieContainer.innerHTML = "";
     movies.forEach((movie) => {
         const card = document.createElement("div");
@@ -75,11 +85,9 @@ function displayMovies(movies) {
         poster.src = "./assets/defaultposter.webp";
             };
 
-poster.alt = movie.Title;
-
-        poster.style.cursor = "pointer";
-        poster.addEventListener("click", () => {
-            window.location.href = `./pages/details.html?id=${movie.imdbID}`;
+        card.style.cursor = "pointer";
+        card.addEventListener("click", () => {
+            window.location.href = `./pages/details.html?id=${movie.imdbID}&from=home`;
         });
 
         // Movie title
@@ -166,9 +174,9 @@ function displayFavorites() {
         poster.src = "../assets/defaultposter.webp";
             };
 
-        poster.style.cursor = "pointer";
-        poster.addEventListener("click", () => {
-            window.location.href = `details.html?id=${movie.imdbID}`;
+        card.style.cursor = "pointer";
+        card.addEventListener("click", () => {
+            window.location.href = `details.html?id=${movie.imdbID}&from=favorites`;
         });
 
         // Movie title
@@ -214,6 +222,18 @@ async function getMovieDetails() {
 
     const params = new URLSearchParams(window.location.search);
     const movieID = params.get("id");
+    const from = params.get("from");
+
+    if (backbtn) {
+        if (from === "favorites") {
+            backbtn.textContent = "← back to favorites";
+            backbtn.href = "./favorites.html";
+        } 
+        else {
+            backbtn.textContent = "← back to home";
+            backbtn.href = "../index.html";
+        }
+    }
 
     if (!movieID) {
         detailsContainer.textContent = "Movie not found!";
@@ -257,6 +277,7 @@ async function getMovieDetails() {
     } catch (error) {
         console.log(error);
         detailsContainer.textContent = "Unable to load movie details.";
+        status.style.color = "red"
     }
 }
 
