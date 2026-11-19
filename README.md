@@ -35,6 +35,4 @@ NijVerse is a simple movie search application that allows users to search for mo
 ## How to run
  I have deployed this movie-app using github pages, so click on this this below link..  
  <h2> https://nij-bhavsar.github.io/movie-app/index.html </h2>
----
 
-© 2026 NijVerse. All Rights Reserved.
