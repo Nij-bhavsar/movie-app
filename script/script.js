@@ -9,11 +9,9 @@ let favoriteContainer = document.querySelector("#favoriteContainer");
 let status = document.querySelector("#status");
 
 // GET FAVORITES FROM LOCAL STORAGE
-
 let favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 // SEARCH MOVIES
-
 if (btn && inp) {
     btn.addEventListener("click", () => {
         let movieName = inp.value.trim();
@@ -25,7 +23,6 @@ if (btn && inp) {
     });
 
     // Search using Enter key
-
     inp.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             btn.click();
@@ -34,7 +31,6 @@ if (btn && inp) {
 }
 
 // FETCH MOVIES FROM API
-
 async function getMovies(movieName) {
     try {
         status.textContent = "Loading movies...";
@@ -50,15 +46,15 @@ async function getMovies(movieName) {
             displayMovies(data.Search);
         } else {
             status.textContent = data.Error;
+            status.style.color = "red";
         }
     } catch (error) {
         console.log(error);
-        status.textContent = error.message;
+        status.textContent = "Error: ", error.message;
     }
 }
 
 // DISPLAY MOVIE CARDS
-
 function displayMovies(movies) {
     movieContainer.innerHTML = "";
     movies.forEach((movie) => {
@@ -66,12 +62,16 @@ function displayMovies(movies) {
         card.classList.add("moviecard");
 
         // Movie poster
-
         const poster = document.createElement("img");
         poster.src = movie.Poster !== "N/A"
             ? movie.Poster
             : "https://placehold.co/300x450?text=No+Poster";
-        poster.alt = movie.Title;
+        poster.alt = "image is not availaible!!";
+
+        poster.style.cursor = "pointer";
+        poster.addEventListener("click", () => {
+            window.location.href = `details.html?id=${movie.imdbID}`;
+        });
 
         // Movie title
         const title = document.createElement("h3");
@@ -106,7 +106,6 @@ function displayMovies(movies) {
 }
 
 // ADD MOVIE TO FAVORITES
-
 function addFavorite(movie) {
     const exist = favorites.some(
         (fav) => fav.imdbID === movie.imdbID
@@ -126,7 +125,6 @@ function addFavorite(movie) {
 }
 
 // DISPLAY FAVORITES PAGE
-
 function displayFavorites() {
 
     if (!favoriteContainer) {
@@ -153,6 +151,11 @@ function displayFavorites() {
             : "https://placehold.co/300x450?text=No+Poster";
         poster.alt = movie.Title;
 
+        poster.style.cursor = "pointer";
+        poster.addEventListener("click", () => {
+            window.location.href = `details.html?id=${movie.imdbID}`;
+        });
+
         // Movie title
         const title = document.createElement("h3");
         title.textContent = movie.Title;
@@ -163,7 +166,7 @@ function displayFavorites() {
 
         // Remove button
         const removeBtn = document.createElement("button");
-        removeBtn.textContent = "❌ Remove Favorite";
+        removeBtn.textContent = "Remove Favorite";
 
         removeBtn.addEventListener("click", () => {
             removeFavorite(movie.imdbID);
@@ -175,7 +178,6 @@ function displayFavorites() {
 }
 
 // REMOVE MOVIE FROM FAVORITES
-
 function removeFavorite(id) {
     favorites = favorites.filter(
         (movie) => movie.imdbID !== id
@@ -188,10 +190,66 @@ function removeFavorite(id) {
 
 }
 
-// LOAD FAVORITES WHEN PAGE OPENS
+// detail movie page
+async function getMovieDetails() {
+    const detailsContainer = document.querySelector("#detailsContainer");
+    const detailsStatus = document.querySelector("#detailsStatus")
+    
+    if (!detailsContainer) {
+        return;
+    }
 
+    const params = new URLSearchParams(window.location.search);
+    const movieID = params.get("id");
+
+    if (!movieID) {
+        detailsContainer.textContent = "Movie not found!";
+        return;
+    }
+
+    try {
+        detailsStatus.textContent = "Loading Movie details...";
+        const response = await fetch(
+            `${API_URL}?i=${movieID}&plot=full&apikey=${API_KEY}`
+        );
+
+        const movie = await response.json();
+        console.log("Movie Details:", movie);
+
+        if (movie.Response === "True") {
+            detailsStatus.textContent = ""
+            detailsContainer.innerHTML = `
+                <div class="details-card">
+                    <img src="${movie.Poster !== "N/A" ? movie.Poster : "https://placehold.co/300x450"}" alt="${movie.Title}">
+
+                    <div>
+                        <h1>${movie.Title}</h1>
+                        <p><strong>Year:</strong> ${movie.Year}</p>
+                        <p><strong>Genre:</strong> ${movie.Genre}</p>
+                        <p><strong>Director:</strong> ${movie.Director}</p>
+                        <p><strong>Actors:</strong> ${movie.Actors}</p>
+                        <p><strong>IMDb Rating:</strong> ${movie.imdbRating}</p>
+                        <p><strong>Plot:</strong> ${movie.Plot}</p>
+                    </div>
+                </div>
+            `;
+
+        } else {
+            detailsContainer.textContent = movie.Error;
+            detailsStatus.style.color = "red";
+        }
+
+    } catch (error) {
+        console.log(error);
+        detailsContainer.textContent = "Unable to load movie details.";
+    }
+}
+
+getMovieDetails();
+
+// LOAD FAVORITES WHEN PAGE OPENS
 displayFavorites();
 if (movieContainer) {
-    getMovies("Batman");
+    getMovies("Fast & Furious");
 
 }
