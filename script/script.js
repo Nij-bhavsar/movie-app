@@ -300,7 +300,10 @@ const movieKeywords = [
     "RRR",
     "India",
     "Harry Potter",
-    "Fast"
+    "Fast",
+    "Bahubali",
+    "Jailer",
+    "F1 the movie"
 ];
 
 // default movie function
