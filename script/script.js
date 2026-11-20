@@ -23,27 +23,22 @@ if (btn && inp) {
             status.style.color = "red"
             return;
         }
-        heading2.textContent = "Search result..."
-        document.querySelector("#home").scrollIntoView({ 
-            behavior: "smooth"});
-        getMovies(movieName);
+        heading2.textContent = `Search result... for "${movieName}"`;
+        getMovies(movieName, true);
     });
 
     // Search using Enter key
     inp.addEventListener("keydown", (event) => {
         if (event.key === "Enter") {
             btn.click();
-            document.querySelector("#home").scrollIntoView({ 
-            behavior: "smooth"});
         }
     });
 }
 
 // FETCH MOVIES FROM API
-async function getMovies(movieName) {
+async function getMovies(movieName, shouldScroll = false) {
     try {
         status.textContent = "Loading movies...";
-        // heading3.textContent = "Search results..."
         movieContainer.innerHTML = "";
         const url = `${API_URL}?s=${encodeURIComponent(movieName)}&apikey=${API_KEY}`
         console.log("Fetching URL:", url);
@@ -54,14 +49,24 @@ async function getMovies(movieName) {
         if (data.Response === "True") {
             status.textContent = "";
             displayMovies(data.Search);
+
+            if (shouldScroll) {
+            document.querySelector("#home").scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+            });
+        }
+        
         } else {
             status.textContent = data.Error;
             status.style.color = "red";
         }
-    } catch (error) {
+    }
+    catch (error) {
         console.log(error);
         status.textContent = "Error: ", error.message;
     }
+    
 }
 
 // DISPLAY MOVIE CARDS
@@ -110,7 +115,8 @@ function displayMovies(movies) {
 
         favbtn.disabled = alreadyAdded;
 
-        favbtn.addEventListener("click", () => {
+        favbtn.addEventListener("click", (event) => {
+            event.stopPropagation();
             addFavorite(movie);
             favbtn.textContent = "❤️ Added to Favorites";
             favbtn.disabled = true;
@@ -176,7 +182,7 @@ function displayFavorites() {
 
         card.style.cursor = "pointer";
         card.addEventListener("click", () => {
-            window.location.href = `details.html?id=${movie.imdbID}&from=favorites`;
+            window.location.href = `./details.html?id=${movie.imdbID}&from=favorites`;
         });
 
         // Movie title
@@ -191,7 +197,8 @@ function displayFavorites() {
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "Remove Favorite";
 
-        removeBtn.addEventListener("click", () => {
+        removeBtn.addEventListener("click", (event) => {
+            event.stopPropagation();
             removeFavorite(movie.imdbID);
         });
         card.append(poster, title, year, removeBtn);
@@ -226,11 +233,11 @@ async function getMovieDetails() {
 
     if (backbtn) {
         if (from === "favorites") {
-            backbtn.textContent = "← back to favorites";
+            backbtn.textContent = "← back";
             backbtn.href = "./favorites.html";
         } 
-        else {
-            backbtn.textContent = "← back to home";
+        else{
+            backbtn.textContent = "← back";
             backbtn.href = "../index.html";
         }
     }
@@ -283,9 +290,31 @@ async function getMovieDetails() {
 
 getMovieDetails();
 
+// DEFAULT MOVIE SEARCH KEYWORDS
+const movieKeywords = [
+    "Avengers",
+    "Batman",
+    "Spider Man",
+    "Dangal",
+    "Pushpa",
+    "RRR",
+    "India",
+    "Harry Potter",
+    "Fast"
+];
+
+// default movie function
+function loadRandomMovies() {
+    const randomIndex = Math.floor(
+        Math.random() * movieKeywords.length
+    );
+
+    const randomMovie = movieKeywords[randomIndex];
+
+    getMovies(randomMovie);
+}
 // LOAD FAVORITES WHEN PAGE OPENS
 displayFavorites();
 if (movieContainer) {
-    getMovies("Fast & Furious");
-
+    loadRandomMovies();
 }

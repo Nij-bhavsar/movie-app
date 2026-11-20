@@ -21,27 +21,45 @@
             </div>
     </nav>
     <div class="body">
-        <main class="main">
-            <div>
-                <p id="heading">Discover Your<br> Next <span id="favorite">Favorite</span> Movie</p>
-                <p id="guide">Search, explore and save your favorite movies<br> all in one place.</p>
-        
-                <input type="text" placeholder="🔎︎ Search for movies..." id="inp">
-                <button type="submit" id="subbtn">Search</button>
-            </div>
-            <div>
-                <img src="./assets/heroimg.webp" alt="heroimg" id="heroimg">
-            </div>  
+    <main class="main">
+
+    <div class="hero-content">
+
+        <p id="heading">
+            Discover Your<br>
+            Next <span id="favorite">Favorite</span> Movie
+        </p>
+
+        <p id="guide">
+            Search, explore and save your favorite movies<br>
+            all in one place.
+        </p>
+
+        <!-- Movie Search -->
+        <div class="search-box">
+            <input
+                type="text"
+                placeholder="🔎︎ Search for movies..."
+                id="inp"
+            >
+            <button type="button" id="subbtn">Search</button>
+        </div>
+
+    </div>
+
+    <div class="hero-image">
+        <img src="./assets/heroimg.webp" alt="Movie illustration" id="heroimg">
+    </div>
+
+</main>
     </div>  
 
-            <!-- for movie search -->
-            <p id="status"></p>
+    <p id="status"></p>
 
-            <section id="home">
-            <h2 id="heading2">Explore Movies</h2>
-            <div id="movieContainer"></div>
-            </section>
-        </main>
+    <section id="home">
+        <h2 id="heading2">Explore Movies <a href="#home">➔</a></h2>
+        <div id="movieContainer"></div>
+    </section>
     <footer class="footer">
         <p>© 2026 NijVerse. All Rights Reserved</p>
     </footer>
