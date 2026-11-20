@@ -445,10 +445,13 @@ h1, h2, h3, footer, #heading, .navbar a {
     }
 
     .moviecard img {
+        display: block;
         width: 100%;
-        height: 180px;
-        object-fit: contain;
-        border-radius: 8px;
+        aspect-ratio: 2 / 3;
+        height: auto;
+        object-fit: cover;
+        border-radius: 10px;
+        padding: 5px;
     }
 
     .moviecard h3 {
@@ -499,10 +502,13 @@ h1, h2, h3, footer, #heading, .navbar a {
     }
 
     #favoriteContainer .moviecard img {
+        display: block;
         width: 100%;
-        height: 200px;
-        object-fit: contain;
-        border-radius: 8px;
+        height: auto;
+        aspect-ratio: 2 / 3;
+        object-fit: cover;
+        border-radius: 10px;
+        padding: 5px;
     }
 
     #favoriteContainer .moviecard h3 {
